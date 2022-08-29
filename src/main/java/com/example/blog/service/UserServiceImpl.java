@@ -18,6 +18,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
+        if(user.getMessage() != null &&
+                user.getMessage().length() > 0 &&
+                user.getName() != null &&
+                user.getName().length() > 0) {
+            throw new IllegalStateException("Name or massage not valid");
+        }
         return userRepository.save(user);
     }
 

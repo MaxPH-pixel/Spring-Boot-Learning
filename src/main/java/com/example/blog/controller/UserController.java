@@ -32,7 +32,7 @@ public class UserController {
     @PutMapping(path = "{userId}")
     public void updateMassage(
             @PathVariable("userId") Integer userId,
-            @RequestParam(required = false) String massage){
+                                    String massage){
         userService.updateMassage(userId, massage);
     }
 }
