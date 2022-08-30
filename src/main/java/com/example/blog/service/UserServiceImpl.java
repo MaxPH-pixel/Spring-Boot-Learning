@@ -1,14 +1,14 @@
 package com.example.blog.service;
 
-import com.example.blog.model.User;
+import com.example.blog.model.dto.UserCreateDto;
+import com.example.blog.model.entity.User;
 import com.example.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -17,13 +17,11 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User saveUser(User user) {
-        if(user.getMessage() != null &&
-                user.getMessage().length() > 0 &&
-                user.getName() != null &&
-                user.getName().length() > 0) {
-            throw new IllegalStateException("Name or massage not valid");
-        }
+    public User saveUser(UserCreateDto userCreateDto) {
+        User user = User.builder()
+                .name(userCreateDto.getName())
+                .message(userCreateDto.getMessage())
+                .build();
         return userRepository.save(user);
     }
 
@@ -36,8 +34,8 @@ public class UserServiceImpl implements UserService {
     public void deleteMassage(Integer id) {
         boolean exists = userRepository
                 .existsById(id);
-        if(!exists){
-            throw new IllegalArgumentException("User with id " + id + "does not exists");
+        if (!exists) {
+            throw new EntityNotFoundException("User with id " + id + "does not exists");
         }
         userRepository.deleteById(id);
     }
@@ -46,10 +44,6 @@ public class UserServiceImpl implements UserService {
     public void updateMassage(Integer id, String massage) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Massage with id " + id + "does not exists"));
-
-        if(massage != null &&
-                    massage.length() > 0 ){
-            user.setMessage(massage);
-        }
+        user.setMessage(massage);
     }
 }

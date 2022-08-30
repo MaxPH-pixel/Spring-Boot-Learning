@@ -1,25 +1,32 @@
 package com.example.blog.controller;
 
-import com.example.blog.model.User;
+import com.example.blog.model.dto.UserCreateDto;
+import com.example.blog.model.entity.User;
 import com.example.blog.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    private UserService userService;
 
-    @PostMapping("/add")
-    public String addUser(@RequestBody User user) {
-        userService.saveUser(user);
-        return "New message is added";
+    private final UserService userService;
+
+    @PostMapping()
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public void addUser(@RequestBody @Valid UserCreateDto userCreateDto) {
+        userService.saveUser(userCreateDto);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping()
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
@@ -29,10 +36,10 @@ public class UserController {
         userService.deleteMassage(userid);
     }
 
-    @PutMapping(path = "{userId}")
+    @PatchMapping (path = "{userId}")
     public void updateMassage(
             @PathVariable("userId") Integer userId,
-                                    String massage){
+            @Size(max = 1000) @NotNull String massage) {
         userService.updateMassage(userId, massage);
     }
 }
