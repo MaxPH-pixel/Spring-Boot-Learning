@@ -20,7 +20,8 @@ public class UserServiceImpl implements UserService {
     public User saveUser(UserCreateDto userCreateDto) {
         User user = User.builder()
                 .name(userCreateDto.getName())
-                .message(userCreateDto.getMessage())
+                .email(userCreateDto.getEmail())
+                .password(userCreateDto.getPassword())
                 .build();
         return userRepository.save(user);
     }
@@ -41,9 +42,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public void updateMassage(Integer id, String massage) {
+    public void updateMassage(Integer id, String email, String password) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Massage with id " + id + "does not exists"));
-        user.setMessage(massage);
+                .orElseThrow(() -> new IllegalStateException("User with id " + id + "does not exists"));
+        user.setEmail(email);
+        user.setPassword(password);
     }
 }

@@ -12,6 +12,9 @@ public class UserCreateDto {
     @Size(max = 50)
     private String name;
     @NotNull
-    @Size(max = 1000)
-    private String message;
+    @Size(max = 50)
+    private String email;
+    @NotNull
+    @Size(max = 50)
+    private String password;
 }

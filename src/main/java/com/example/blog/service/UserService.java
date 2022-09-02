@@ -9,5 +9,5 @@ public interface UserService {
     public User saveUser(UserCreateDto userCreateDto);
     public List<User> getAllUsers();
     public void deleteMassage(Integer id);
-    public void updateMassage(Integer id, String massage);
+    public void updateMassage(Integer id, String email, String password);
 }

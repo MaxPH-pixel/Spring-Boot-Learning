@@ -36,10 +36,11 @@ public class UserController {
         userService.deleteMassage(userid);
     }
 
-    @PatchMapping (path = "{userId}")
+    @PutMapping (path = "{userId}")
     public void updateMassage(
             @PathVariable("userId") Integer userId,
-            @Size(max = 1000) @NotNull String massage) {
-        userService.updateMassage(userId, massage);
+            @RequestParam(required = false) @Size(max = 50) @NotNull String email,
+            @RequestParam(required = false) @Size(max = 50) @NotNull String password) {
+        userService.updateMassage(userId, email, password);
     }
 }
